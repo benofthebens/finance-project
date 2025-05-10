@@ -1,0 +1,25 @@
+services:
+  expense:
+    build: services/expense-service
+    environment:
+      - SPRING_PROFILES_ACTIVE = docker
+    depends_on:
+      oracle:
+        condition: service_healthy
+  gateway:
+    build: services/gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE = docker
+    ports:
+      - "8443:8443"
+  oracle:
+    env_file:
+      - .env
+    image: container-registry.oracle.com/database/express:latest
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PWD=${ORACLE_PWD}
+    volumes:
+      - ./db/init.sql:/opt/oracle/init.sql
+      - ./db/init.sh:/opt/oracle/init.sh

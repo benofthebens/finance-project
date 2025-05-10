@@ -19,7 +19,21 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+	implementation("org.springframework.kafka:spring-kafka")
+
+	implementation(project(":api"))
+	implementation(project(":utils"))
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
+	testImplementation("org.springframework.security:spring-security-test")
+
+	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
