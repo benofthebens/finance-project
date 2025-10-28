@@ -12,20 +12,29 @@ public class ExpenseEntity {
     @Id
     @Column(name="EXPENSE_ID")
     private String expenseId;
+
+    @Column(name="USER_ID")
+    private String userId;
+
     @Column(name="DESCRIPTION")
     private String description;
+
     @Column(name="STATUS")
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @Column(name="AMOUNT")
     private double amount;
+
     @Column(name="EXPENSE_DATE")
     private LocalDate expenseDate;
+
     public ExpenseEntity() {
 
     }
-    public ExpenseEntity(String expenseId, String description, Status status, double amount, LocalDate expenseDate) {
+    public ExpenseEntity(String expenseId,String userId, String description, Status status, double amount, LocalDate expenseDate) {
         this.expenseId = expenseId;
+        this.userId = userId;
         this.description = description;
         this.status = status;
         this.amount = amount;
@@ -70,5 +79,13 @@ public class ExpenseEntity {
 
     public void setExpenseId(String expenseId) {
         this.expenseId = expenseId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

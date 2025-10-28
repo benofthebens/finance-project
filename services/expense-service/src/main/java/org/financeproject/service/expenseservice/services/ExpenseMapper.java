@@ -9,6 +9,7 @@ public class ExpenseMapper implements Mapper<Expense, ExpenseEntity> {
     public Expense entityToApi(ExpenseEntity entity) {
         return new Expense(
                 entity.getExpenseId(),
+                entity.getUserId(),
                 entity.getAmount(),
                 entity.getDescription(),
                 entity.getStatus(),
@@ -20,6 +21,7 @@ public class ExpenseMapper implements Mapper<Expense, ExpenseEntity> {
     public ExpenseEntity apiToEntity(Expense api) {
         return new ExpenseEntity(
                 api.getExpenseId(),
+                api.getUserId(),
                 api.getDescription(),
                 api.getStatus(),
                 api.getAmount(),

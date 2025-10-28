@@ -6,12 +6,32 @@ services:
     depends_on:
       oracle:
         condition: service_healthy
+  # Spring Cloud gateway
   gateway:
-    build: services/gateway
+    build: services/gateway # Docker file build
     environment:
-      - SPRING_PROFILES_ACTIVE = docker
-    ports:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports: # Expose 8443
       - "8443:8443"
+
+  keycloak:
+    env_file:
+      - .env
+    build: keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_ADMIN=${KEYCLOAK_USER}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_PWD}
+      - KC_DB=oracle
+      - KC_DB_URL=jdbc:oracle:thin:@//oracle:1521/KEYCLOAK
+      - KC_DB_USERNAME=${ORACLE_USER}
+      - KC_DB_PASSWORD=${ORACLE_PWD}
+    command: ["start-dev", "--http-port=8080"]
+    depends_on:
+      oracle:
+        condition: service_healthy
+
   oracle:
     env_file:
       - .env

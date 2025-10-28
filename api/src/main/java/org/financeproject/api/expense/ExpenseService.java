@@ -8,13 +8,18 @@ import reactor.core.publisher.Mono;
 public interface ExpenseService {
     @GetMapping(
             produces = "application/json",
-            path = "/get"
+            path = "/api/expense"
     )
-    Flux<Expense> getExpenses(@RequestParam(required = false) Status status);
+    Flux<Expense> getExpenses(
+            @RequestParam String userId,
+            @RequestParam(required = false) Status status
+    );
 
     @PostMapping(
             consumes = "application/json",
-            path = "/create"
+            path = "/api/expense"
     )
-    Mono<Void> createExpense(@RequestBody Expense expense);
+    Mono<Void> createExpense(
+            @RequestBody Expense expense
+    );
 }

@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class Expense {
     private String expenseId;
+    private String userId;
     private double amount;
     private String description;
     private Status status;
@@ -17,9 +18,9 @@ public class Expense {
     private LocalDate expenseDate;
 
     public Expense() {
-        this("", 0,"", Status.PENDING, LocalDate.now());
+        this("", "", 0,"", Status.PENDING, LocalDate.now());
     }
-    public Expense(String expenseId, double amount, String description, Status status, LocalDate expenseDate) {
+    public Expense(String expenseId,String userId, double amount, String description, Status status, LocalDate expenseDate) {
         this.expenseId = expenseId;
         this.amount = amount;
         this.description = description;
@@ -59,5 +60,13 @@ public class Expense {
 
     public void setExpenseId(String expenseId) {
         this.expenseId = expenseId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
