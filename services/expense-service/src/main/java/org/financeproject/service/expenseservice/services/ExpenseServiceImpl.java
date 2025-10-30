@@ -2,6 +2,7 @@ package org.financeproject.service.expenseservice.services;
 
 import org.financeproject.api.expense.Expense;
 import org.financeproject.api.expense.ExpenseService;
+import org.financeproject.service.expenseservice.events.KafkaEventProducer;
 import org.financeproject.service.expenseservice.persitence.ExpenseEntity;
 import org.financeproject.service.expenseservice.persitence.ExpenseRepository;
 import org.financeproject.utils.Status;
@@ -16,13 +17,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
 
-    public ExpenseServiceImpl(ExpenseRepository expenseRepository, ExpenseMapper expenseMapper) {
+    private final KafkaEventProducer kafkaEventProducer;
+
+    public ExpenseServiceImpl(ExpenseRepository expenseRepository, ExpenseMapper expenseMapper, KafkaEventProducer kafkaEventProducer) {
         this.expenseRepository = expenseRepository;
         this.expenseMapper = expenseMapper;
+        this.kafkaEventProducer = kafkaEventProducer;
     }
 
     @Override
     public Flux<Expense> getExpenses(String userId, Status status) {
+        kafkaEventProducer.sendMessage("my-topic", userId);
         if (status == null) {
             return Flux.fromStream(
                     expenseRepository.getAllByUserId(userId).stream().map(expenseMapper::entityToApi)

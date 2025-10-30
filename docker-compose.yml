@@ -1,4 +1,5 @@
 services:
+  # Services
   expense:
     build: services/expense-service
     environment:
@@ -13,6 +14,29 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     ports: # Expose 8443
       - "8443:8443"
+  # External Providers
+  kafka:
+    image: confluentinc/cp-kafka:7.3.1
+    restart: always
+    mem_limit: 1024m
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_BROKER_ID=1
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.1
+    restart: always
+    mem_limit: 512m
+    ports:
+      - "2181:2181"
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
 
   keycloak:
     env_file:
@@ -35,11 +59,14 @@ services:
   oracle:
     env_file:
       - .env
-    image: container-registry.oracle.com/database/express:latest
+    image: container-registry.oracle.com/database/express:21.3.0-xe
     ports:
       - "1521:1521"
     environment:
       - ORACLE_PWD=${ORACLE_PWD}
     volumes:
-      - ./db/init.sql:/opt/oracle/init.sql
-      - ./db/init.sh:/opt/oracle/init.sh
+      - oradata:/opt/oracle/oradata
+      - ./db/init.sql:/opt/oracle/scripts/startup/init.sql
+
+volumes:
+  oradata:
